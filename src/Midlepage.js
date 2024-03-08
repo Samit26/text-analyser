@@ -7,6 +7,21 @@ import './Midlepage.css';
 export default function Midlepage(props) {
 
     const [Text, setText] = useState('Enter Text Here');
+    const [speechSynthesis, setSpeechSynthesis] = useState(window.speechSynthesis);
+    const [isSpeaking, setIsSpeaking] = useState(false);
+
+    const handleSpeak = () => {
+      const utterance = new SpeechSynthesisUtterance(Text);
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      speechSynthesis.speak(utterance);
+    };
+  
+    const handlePause = () => {
+      speechSynthesis.pause();
+      setIsSpeaking(false);
+    };
+  
 
     const handleUpClick=() => {
         let newText = Text.toUpperCase();
@@ -58,6 +73,8 @@ export default function Midlepage(props) {
   <button type="button" onClick={handleClear} className="btn btn-primary mb-3" id='Clear_btn'>Clear All</button>
   <button type="button" onClick={handleSpace} className="btn btn-primary mb-3" id='Clear_btn'>Remove Extra Space</button>
   <button type="button" onClick={handleCopy} className="btn btn-primary mb-3" id='Clear_btn'>Copy Text</button>
+  <button type="button" onClick={handleSpeak} disabled={isSpeaking} className="btn btn-primary mb-3" id='Clear_btn'>Text to Speech</button>
+  {isSpeaking && <button type="button" onClick={handlePause} className="btn btn-danger mb-3" id='Clear_btn'>Pause</button>}
 
   </div>
 
