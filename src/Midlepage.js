@@ -8,19 +8,32 @@ export default function Midlepage(props) {
 
     const [Text, setText] = useState('Enter Text Here');
     const [speechSynthesis, setSpeechSynthesis] = useState(window.speechSynthesis);
-    const [isSpeaking, setIsSpeaking] = useState(false);
+    // const [isSpeaking, setIsSpeaking] = useState(false);
+    const [showControls, setShowControls] = useState(false);
 
     const handleSpeak = () => {
       const utterance = new SpeechSynthesisUtterance(Text);
-      utterance.onstart = () => setIsSpeaking(true);
-      utterance.onend = () => setIsSpeaking(false);
+      // utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => setShowControls(false);
       speechSynthesis.speak(utterance);
+      setShowControls(true);
     };
   
-    const handlePause = () => {
-      speechSynthesis.pause();
-      setIsSpeaking(false);
+    const handleStop = () => {
+      speechSynthesis.cancel();
+      // setIsSpeaking(false);
+      setShowControls(false);
     };
+
+    // const handleResume = () => {
+    //   speechSynthesis.resume();
+    //   setIsSpeaking(true);
+    // };
+
+    // const handleClose = () => {
+    //   setShowControls(false);
+    //   setIsSpeaking(true);
+    // };
   
 
     const handleUpClick=() => {
@@ -73,8 +86,14 @@ export default function Midlepage(props) {
   <button type="button" onClick={handleClear} className="btn btn-primary mb-3" id='Clear_btn'>Clear All</button>
   <button type="button" onClick={handleSpace} className="btn btn-primary mb-3" id='Clear_btn'>Remove Extra Space</button>
   <button type="button" onClick={handleCopy} className="btn btn-primary mb-3" id='Clear_btn'>Copy Text</button>
-  <button type="button" onClick={handleSpeak} disabled={isSpeaking} className="btn btn-primary mb-3" id='Clear_btn'>Text to Speech</button>
-  {isSpeaking && <button type="button" onClick={handlePause} className="btn btn-danger mb-3" id='Clear_btn'>Pause</button>}
+  <button type="button" onClick={handleSpeak}  className="btn btn-primary mb-3" id='Clear_btn'>Text to Speech</button>
+  {showControls ? (
+          <>
+            <button type="button" onClick={handleStop} className="btn btn-danger mb-3" id='Clear_btn'>Stop</button>
+            {/* <button type="button" onClick={handleResume} className="btn btn-danger mb-3" id='Clear_btn'>Resume</button>
+            <button type="button" onClick={handleClose} className="btn btn-danger mb-3" id='Clear_btn'>Close</button> */}
+          </>
+        ) : null}
 
   </div>
 
